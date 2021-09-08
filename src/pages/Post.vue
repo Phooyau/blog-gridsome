@@ -66,6 +66,27 @@
   </Layout>
 </template>
 
+<page-query>
+query {
+  allStrapiPost {
+    edges {
+      node {
+        id
+        title
+        author {
+          id
+          username
+        }
+        tags {
+          id
+          title
+        }
+      }
+    }
+  }
+}
+</page-query>
+
 <script>
 export default {
   name: 'PostPage'

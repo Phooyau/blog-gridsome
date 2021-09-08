@@ -4,10 +4,18 @@
 
 // Changes here require a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
+const axios = require('axios')
 
 module.exports = function (api) {
-  api.loadSource(({ addCollection }) => {
+  api.loadSource(async ({ addCollection }) => {
     // Use the Data Store API here: https://gridsome.org/docs/data-store-api/
+    const collection = addCollection('StrapiPost')
+
+    const { data } = await axios.get('http://localhost:1337/posts')
+
+    for (const item of data) {
+      collection.addNode(item)
+    }
   })
 
   api.createPages(({ createPage }) => {
