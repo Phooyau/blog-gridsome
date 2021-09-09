@@ -410,3 +410,14 @@ footer .copyright {
   font-size: 16px;
   padding: 25px 35px;
 }
+
+/**
+ * 补充样式
+ */
+.article-head {
+  position: relative;
+}
+
+.article-body img {
+  width: 100%;
+}
