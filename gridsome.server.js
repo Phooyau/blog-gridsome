@@ -7,14 +7,32 @@
 const axios = require('axios')
 
 module.exports = function (api) {
-  api.loadSource(async ({ addCollection }) => {
+  api.loadSource(async (actions) => {
     // Use the Data Store API here: https://gridsome.org/docs/data-store-api/
-    // const collection = addCollection('StrapiPost')
 
-    // const { data } = await axios.get('http://localhost:1337/posts')
+    // 使用 belongsTo 方法
+    // const { addCollection, getCollection } = actions
+    // const posts = addCollection('StrapiPost')
+    // const tags = addCollection('StrapiTag')
+    // posts.addReference('tags', 'StrapiTag')
 
-    // for (const item of data) {
-    //   collection.addNode(item)
+    // const postsPro = axios.get('http://localhost:1337/posts')
+    // const tagsPro = axios.get('http://localhost:1337/tags')
+
+    // const [postsRes, tagsRes] = await Promise.all([postsPro, tagsPro])
+
+    // for (const item of postsRes.data) {
+    //   posts.addNode({
+    //     ...item,
+    //     tags: item.tags.map(({ id }) => id)
+    //   })
+    // }
+
+    // for (const item of tagsRes.data) {
+    //   tags.addNode({
+    //     ...item,
+    //     posts: item.posts.map(({ id }) => id)
+    //   })
     // }
   })
 
