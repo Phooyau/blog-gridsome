@@ -54,34 +54,27 @@ query ($id: ID!, $page: Int) {
     id
     title
     created_at
-  }
-  posts: allStrapiPost(
-    filter: {
-      tags: {
-        id: {
-          eq: 1
-        }
+    belongsTo(perPage: 2, page: $page) @paginate {
+      totalCount
+      pageInfo {
+        totalPages
+        currentPage
       }
-    },
-    perPage: 1,
-    page: $page
-  ) @paginate {
-    pageInfo {
-      totalPages
-      currentPage
-    }
-    edges {
-      node {
-        id
-        title
-        created_at
-        author {
-          id
-          username
-        }
-        tags {
-          id
-          title
+      edges {
+        node {
+          ... on StrapiPost {
+            id
+            title
+            created_at
+            author {
+              id
+              username
+            }
+            tags {
+              id
+              title
+            }
+          }
         }
       }
     }
@@ -90,33 +83,40 @@ query ($id: ID!, $page: Int) {
 </page-query>
 
 <script>
-// 使用 belongsTo 方法
+// 方法二：同时查询 tag 和 posts，暂未解决 id 和 eq 类型不一致问题
 // query ($id: ID!, $page: Int) {
 //   tag: strapiTag(id: $id) {
 //     id
 //     title
 //     created_at
-//     belongsTo(perPage: 1, page: $page) @paginate {
-//       totalCount
-//       pageInfo {
-//         totalPages
-//         currentPage
+//   }
+//   posts: allStrapiPost(
+//     filter: {
+//       tags: {
+//         id: {
+//           eq: 1
+//         }
 //       }
-//       edges {
-//         node {
-//           ... on StrapiPost {
-//             id
-//             title
-//             created_at
-//             author {
-//               id
-//               username
-//             }
-//             tags {
-//               id
-//               title
-//             }
-//           }
+//     },
+//     perPage: 1,
+//     page: $page
+//   ) @paginate {
+//     pageInfo {
+//       totalPages
+//       currentPage
+//     }
+//     edges {
+//       node {
+//         id
+//         title
+//         created_at
+//         author {
+//           id
+//           username
+//         }
+//         tags {
+//           id
+//           title
 //         }
 //       }
 //     }
@@ -132,11 +132,12 @@ export default {
   },
   computed: {
     posts() {
-      // return this.$page.tag.belongsTo.edges
-      return this.$page.posts.edges
+      return this.$page.tag.belongsTo.edges
+      // return this.$page.posts.edges
     },
     pageInfo() {
-      return this.$page.posts.pageInfo
+      return this.$page.tag.belongsTo.pageInfo
+      // return this.$page.posts.pageInfo
     }
   }
 }

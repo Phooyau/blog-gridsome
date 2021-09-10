@@ -34,6 +34,20 @@ module.exports = function (api) {
     //     posts: item.posts.map(({ id }) => id)
     //   })
     // }
+
+    /**
+     * 修改 collection，在 post 中添加 tag 的引用，便于使用 belongsTo 查询
+     */
+    const posts = actions.getCollection('StrapiPost')
+    const tags = actions.getCollection('StrapiTag')
+    posts.addReference('tags', 'StrapiTag')
+    console.dir(posts)
+    posts.data().forEach(item => {
+      posts.updateNode({
+        ...item,
+        tags: item.tags.map(({ id }) => id)
+      })
+    })
   })
 
   api.createPages(({ createPage }) => {
