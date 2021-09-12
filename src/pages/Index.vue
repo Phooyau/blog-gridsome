@@ -1,14 +1,17 @@
 <template>
   <Layout>
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('/img/home-bg.jpg')">
+    <header
+      class="masthead"
+      :style="{ backgroundImage: `url(http://localhost:1337${general.cover.url})` }"
+    >
       <div class="overlay"></div>
       <div class="container article-head">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Clean Blog</h1>
-              <span class="subheading">A Blog Theme by Start Bootstrap</span>
+              <h1>{{ general.title }}</h1>
+              <span class="subheading">{{ general.subtitle }}</span>
             </div>
           </div>
         </div>
@@ -19,10 +22,10 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="post-preview" v-for="edge in $page.posts.edges" :key="edge.node.id">
-            <g-link :to="`/post/${edge.node.id}`">
+          <div class="post-preview" v-for="post in posts" :key="post.node.id">
+            <g-link :to="`/post/${post.node.id}`">
               <h2 class="post-title">
-                {{ edge.node.title }}
+                {{ post.node.title }}
               </h2>
               <!-- <h3 class="post-subtitle">
                 Problems look mighty small from 150 miles up
@@ -30,12 +33,13 @@
             </g-link>
             <p class="post-meta">
               Posted by
-              <a href="#">{{ edge.node.author.username }}</a>
-              {{ edge.node.created_at }}
+              <a href="#">{{ post.node.author.username }}</a>
+              {{ post.node.created_at }}
             </p>
             <p>
-              <span v-for="tag in edge.node.tags" :key="tag.id">
-                <g-link :to="`/tag/${tag.id}`">{{ tag.title }}</g-link>&nbsp;&nbsp;
+              <span v-for="tag in post.node.tags" :key="tag.id">
+                <g-link :to="`/tag/${tag.id}`">{{ tag.title }}</g-link
+                >&nbsp;&nbsp;
               </span>
             </p>
             <hr />
@@ -78,13 +82,13 @@
               <a href="#">Start Bootstrap</a>
               on July 8, 2019</p>
           </div> -->
-          <hr>
+          <hr />
 
           <!-- Pager -->
           <!-- <div class="clearfix">
             <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
           </div> -->
-          <Pager :info="$page.posts.pageInfo"/>
+          <Pager :info="pageInfo" />
         </div>
       </div>
     </div>
@@ -95,6 +99,17 @@
 
 <page-query>
 query ($page: Int) {
+  general: allStrapiGeneral {
+    edges {
+      node {
+        title
+        subtitle
+        cover {
+          url
+        }
+      }
+    }
+  }
   posts: allStrapiPost (perPage: 2, page: $page) @paginate {
     pageInfo {
       totalPages
@@ -129,6 +144,17 @@ export default {
   },
   components: {
     Pager
+  },
+  computed: {
+    general() {
+      return this.$page.general.edges[0].node
+    },
+    posts() {
+      return this.$page.posts.edges
+    },
+    pageInfo() {
+      return this.$page.posts.pageInfo
+    }
   }
 }
 </script>

@@ -41,7 +41,6 @@ module.exports = function (api) {
     const posts = actions.getCollection('StrapiPost')
     const tags = actions.getCollection('StrapiTag')
     posts.addReference('tags', 'StrapiTag')
-    console.dir(posts)
     posts.data().forEach(item => {
       posts.updateNode({
         ...item,
